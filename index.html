@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conflict Management Styles Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 3rem 2rem;
+        }
+        
+        h1 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 15px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .questions-section {
+            margin-bottom: 2rem;
+        }
+        
+        .question-block {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .question-block:last-of-type {
+            border-bottom: none;
+        }
+        
+        .question-number {
+            color: #3498db;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .question-text {
+            color: #2c3e50;
+            font-size: 15px;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .scale-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .scale-btn {
+            flex: 1;
+            min-width: 60px;
+            padding: 12px 8px;
+            border: 2px solid #bdc3c7;
+            background: white;
+            color: #7f8c8d;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .scale-btn:hover {
+            border-color: #3498db;
+            color: #3498db;
+        }
+        
+        .scale-btn.selected {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .results-section {
+            display: none;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #ecf0f1;
+        }
+        
+        .results-section.show {
+            display: block;
+        }
+        
+        .primary-style-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .primary-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .primary-style {
+            font-size: 36px;
+            font-weight: 700;
+        }
+        
+        .all-scores {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 2rem;
+        }
+        
+        .score-card {
+            background: #f8f9fa;
+            border: 1px solid #ecf0f1;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .score-label {
+            color: #7f8c8d;
+            font-size: 12px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .score-value {
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .description-box {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 1.5rem;
+            border-radius: 6px;
+        }
+        
+        .description-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .description-text {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .description-when {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: #ecf0f1;
+            border-radius: 2px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Conflict Management Styles Assessment</h1>
+        <p class="subtitle">
+            Rate each statement from 1 (rarely) to 5 (always). There are no right or wrong answers—this helps you understand your natural conflict response.
+        </p>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+        
+        <div class="questions-section" id="questions-container"></div>
+        
+        <div class="results-section" id="results">
+            <div class="primary-style-card">
+                <div class="primary-label">Your primary conflict management style</div>
+                <div class="primary-style" id="primary-style"></div>
+            </div>
+            
+            <div class="all-scores" id="all-scores"></div>
+            
+            <div class="description-box" id="description"></div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { id: 1, text: "If someone disagrees with me, I vigorously defend my side of the issue." },
+            { id: 2, text: "I go along with suggestions from peers, even if I don't agree with them." },
+            { id: 3, text: "I give-and-take so that an agreement can be reached." },
+            { id: 4, text: "I keep my opinions to myself rather than openly disagree with people." },
+            { id: 5, text: "In disagreements or negotiations, I try to find the best possible solutions for both sides by sharing information." },
+            { id: 6, text: "I try to reach a middle ground in disputes with other people." },
+            { id: 7, text: "I go along with the wishes of people who have different points of view than my own." },
+            { id: 8, text: "I refrain from openly debating issues where there is disagreement." },
+            { id: 9, text: "In negotiations, I hold on to my position rather than give in." },
+            { id: 10, text: "I try to solve conflicts by finding solutions that benefit both me and the other person." },
+            { id: 11, text: "I let peers have their way rather than jeopardize our relationship." },
+            { id: 12, text: "I try to win my position in a discussion." },
+            { id: 13, text: "I investigate conflicts with peers so that we can discover solutions that benefit both of us." },
+            { id: 14, text: "It is not worth the time and trouble discussing my differences of opinion with other people." },
+            { id: 15, text: "To reach an agreement, I give up some things in exchange for others." }
+        ];
+
+        const descriptions = {
+            Competing: {
+                description: "You tend to be assertive and uncooperative, prioritizing your own goals. You value being right and may prioritize winning over preserving relationships.",
+                when: "Use when quick, decisive action is required (emergencies) or when you're certain you're correct and it's in everyone's best interest."
+            },
+            Accommodating: {
+                description: "You put others' needs before your own and value relationships highly. You often sacrifice your own goals to maintain harmony.",
+                when: "Use when the issue is trivial, when harmony matters more than the outcome, or to let others learn from their mistakes."
+            },
+            Compromising: {
+                description: "You seek middle ground, willing to give up something to gain something in return. Both sides get part of what they want.",
+                when: "Use when people are willing to be flexible, when a win-win isn't possible, or as a backup plan when collaboration fails."
+            },
+            Avoiding: {
+                description: "You step away from conflict to gain clarity or avoid tension, sometimes giving up goals or relationships to sidestep the issue.",
+                when: "Use when you need time to think, when the issue is trivial, or when the stakes are low."
+            },
+            Collaborating: {
+                description: "You combine assertiveness with cooperation to find solutions beneficial to everyone. You see conflict as an opportunity to strengthen relationships.",
+                when: "Use when everyone's concerns are important and when there's high trust among all parties involved."
+            }
+        };
+
+        const answers = {};
+
+        function renderQuestions() {
+            const container = document.getElementById("questions-container");
+            
+            questions.forEach((q, index) => {
+                const qDiv = document.createElement("div");
+                qDiv.className = "question-block";
+                qDiv.innerHTML = `
+                    <div class="question-number">Question ${q.id}</div>
+                    <div class="question-text">${q.text}</div>
+                    <div class="scale-buttons">
+                        ${[1, 2, 3, 4, 5].map(val => `
+                            <button class="scale-btn" data-question="${q.id}" data-value="${val}">
+                                ${val}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(qDiv);
+            });
+            
+            document.querySelectorAll(".scale-btn").forEach(btn => {
+                btn.addEventListener("click", handleButtonClick);
+            });
+        }
+
+        function handleButtonClick(e) {
+            const question = e.target.dataset.question;
+            const value = parseInt(e.target.dataset.value);
+            
+            answers[question] = value;
+            
+            document.querySelectorAll(`[data-question="${question}"]`).forEach(b => {
+                b.classList.remove("selected");
+            });
+            
+            e.target.classList.add("selected");
+            
+            updateProgress();
+            checkAllAnswered();
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(answers).length;
+            const progress = (answered / 15) * 100;
+            document.getElementById("progress").style.width = progress + "%";
+        }
+
+        function checkAllAnswered() {
+            if (Object.keys(answers).length === 15) {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const scores = {
+                Competing: (answers[1] || 0) + (answers[9] || 0) + (answers[12] || 0),
+                Accommodating: (answers[2] || 0) + (answers[7] || 0) + (answers[11] || 0),
+                Compromising: (answers[3] || 0) + (answers[6] || 0) + (answers[15] || 0),
+                Avoiding: (answers[4] || 0) + (answers[8] || 0) + (answers[14] || 0),
+                Collaborating: (answers[5] || 0) + (answers[10] || 0) + (answers[13] || 0)
+            };
+            
+            const sortedStyles = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            const primary = sortedStyles[0][0];
+            
+            document.getElementById("primary-style").textContent = primary;
+            
+            const scoresDiv = document.getElementById("all-scores");
+            scoresDiv.innerHTML = sortedStyles.map(([style, score]) => `
+                <div class="score-card">
+                    <div class="score-label">${style}</div>
+                    <div class="score-value">${score}/15</div>
+                </div>
+            `).join('');
+            
+            const desc = descriptions[primary];
+            document.getElementById("description").innerHTML = `
+                <div class="description-title">${primary}</div>
+                <div class="description-text">${desc.description}</div>
+                <div class="description-when"><strong>When to use:</strong> ${desc.when}</div>
+            `;
+            
+            document.getElementById("results").classList.add("show");
+            
+            setTimeout(() => {
+                document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }, 100);
+        }
+
+        renderQuestions();
+    </script>
+</body>
+</html>
+```
